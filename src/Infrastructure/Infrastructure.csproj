@@ -30,6 +30,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <!--#if (!UseApiOnly)-->
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
     <!--#endif-->
     <!--#if (UsePostgreSQL)-->
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />

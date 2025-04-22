@@ -36,6 +36,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NLog.Database" />
+    <PackageReference Include="NLog.Web.AspNetCore" />
     <PackageReference Include="NSwag.AspNetCore" />
     <PackageReference Include="NSwag.MSBuild">
       <PrivateAssets>all</PrivateAssets>

@@ -1,9 +1,18 @@
-﻿namespace CleanArchitecture.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿
+using Microsoft.Extensions.Logging;
+
+namespace CleanArchitecture.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
 public record GetWeatherForecastsQuery : IRequest<IEnumerable<WeatherForecast>>;
 
 public class GetWeatherForecastsQueryHandler : IRequestHandler<GetWeatherForecastsQuery, IEnumerable<WeatherForecast>>
 {
+    private readonly ILogger<GetWeatherForecastsQueryHandler> _logger;
+    public GetWeatherForecastsQueryHandler(ILogger<GetWeatherForecastsQueryHandler> logger)
+    {
+        this._logger = logger;
+    }
+
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -13,6 +22,8 @@ public class GetWeatherForecastsQueryHandler : IRequestHandler<GetWeatherForecas
     public async Task<IEnumerable<WeatherForecast>> Handle(GetWeatherForecastsQuery request, CancellationToken cancellationToken)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
+        _logger.LogDebug("CleanArchitecture Domain Event: {DomainEvent}", request.GetType().Name);
+
         var rng = new Random();
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast

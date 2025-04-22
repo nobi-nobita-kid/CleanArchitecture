@@ -1,5 +1,9 @@
-using CleanArchitecture.Infrastructure.Data;
+﻿using CleanArchitecture.Infrastructure.Data;
+using NLog;
+using NLog.Web;
 
+var logger = LogManager.Setup().LoadConfigurationFromFile("nlog.config").GetCurrentClassLogger();
+logger.Debug("NLog configuration loaded successfully.");
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +14,10 @@ builder.AddKeyVaultIfConfigured();
 builder.AddApplicationServices();
 builder.AddInfrastructureServices();
 builder.AddWebServices();
+
+// Add log services to the container.
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 var app = builder.Build();
 
