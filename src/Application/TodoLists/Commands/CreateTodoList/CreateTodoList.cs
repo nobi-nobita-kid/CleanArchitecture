@@ -11,22 +11,40 @@ public record CreateTodoListCommand : IRequest<int>
 public class CreateTodoListCommandHandler : IRequestHandler<CreateTodoListCommand, int>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateTodoListCommandHandler(IApplicationDbContext context)
+    public CreateTodoListCommandHandler(IApplicationDbContext context, IUnitOfWork unitOfWork)
     {
         _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<int> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
     {
-        var entity = new TodoList();
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync();
 
-        entity.Title = request.Title;
+            var entity = new TodoList
+            {
+                Title = request.Title,
+                Created = DateTime.UtcNow
+            };
 
-        _context.TodoLists.Add(entity);
+            _context.TodoLists.Add(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+            // Có thể có thêm xử lý logic liên quan
+
+            await _unitOfWork.CommitAsync();
+
+            return entity.Id;
+        }
+        catch
+        {
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 }

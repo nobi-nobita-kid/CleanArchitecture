@@ -11,7 +11,7 @@ public class TodoLists : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .RequireAuthorization()
+            //.RequireAuthorization()
             .MapGet(GetTodoLists)
             .MapPost(CreateTodoList)
             .MapPut(UpdateTodoList, "{id}")
@@ -35,7 +35,7 @@ public class TodoLists : EndpointGroupBase
     public async Task<Results<NoContent, BadRequest>> UpdateTodoList(ISender sender, int id, UpdateTodoListCommand command)
     {
         if (id != command.Id) return TypedResults.BadRequest();
-        
+
         await sender.Send(command);
 
         return TypedResults.NoContent();

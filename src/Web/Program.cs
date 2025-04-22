@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Infrastructure.Data;
+﻿using CleanArchitecture.Application.Common.Interfaces;
+using CleanArchitecture.Infrastructure.Data;
 using NLog;
 using NLog.Web;
 
@@ -14,6 +15,9 @@ builder.AddKeyVaultIfConfigured();
 builder.AddApplicationServices();
 builder.AddInfrastructureServices();
 builder.AddWebServices();
+
+// Add UnitOfWork
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add log services to the container.
 builder.Logging.ClearProviders();
